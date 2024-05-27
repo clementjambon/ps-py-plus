@@ -26,6 +26,9 @@ ImGuiTabBarFlags = NewType("ImGuiTabBarFlags", int)
 ImGuiTabItemFlags = NewType("ImGuiTabItemFlags", int)
 ImGuiTreeNodeFlags = NewType("ImGuiTreeNodeFlags", int)
 ImGuiWindowFlags = NewType("ImGuiWindowFlags", int)
+ImGuiTableFlags = NewType("ImGuiTableFlags", int)
+ImGuiTableRowFlags = NewType("ImGuiTableRowFlags", int)
+ImGuiTableColumnFlags = NewType("ImGuiTableColumnFlags", int)
 
 # Draw Types
 ImDrawFlags = NewType("ImDrawFlags", int)
@@ -48,7 +51,7 @@ def BeginChild(
     border: bool = False,
     flags: ImGuiWindowFlags = ImGuiWindowFlags(0),
 ) -> bool: ...
-def Endchild() -> None: ...
+def EndChild() -> None: ...
 
 # Windows Utilities
 
@@ -911,6 +914,21 @@ def AddConvexPolyFilled(points: List[ImVec2], num_points: int, col: ImU32) -> No
 def AddBezierCubic(p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, col: ImU32, thickness: float, num_segments: int = 0) -> None: ...
 def AddBezierQuadratic(p1: ImVec2, p2: ImVec2, p3: ImVec2, col: ImU32, thickness: float, num_segments: int = 0) -> None: ...
 
+# Tables
+
+def BeginTable(str_id: str, column: int, flags: ImGuiTableFlags = 0, outer_size: ImVec2 = ImVec2(0.0, 0.0), inner_width: float = 0.0) -> bool: ...
+def EndTable() -> None: ...
+def TableNextRow(row_flags: ImGuiTableRowFlags = 0, min_row_height: float = 0.0) -> None: ...
+def TableNextColumn() -> bool: ...
+def TableSetColumnIndex(column_n: int) -> bool: ...
+
+# Tables: Headers & Columns declaration
+
+def TableSetupColumn(label: str, flags: ImGuiTableColumnFlags = 0, init_width_or_weight: float = 0.0, user_id: ImGuiID = 0) -> None: ...
+def TableSetupScrollFreeze(cols: int, rows: int) -> None: ...
+def TableHeadersRow() -> None: ...
+def TableHeader(label: str) -> None: ...
+
 
 ImGuiWindowFlags_None: int
 ImGuiWindowFlags_NoTitleBar: int
@@ -1240,3 +1258,63 @@ ImGuiCond_Always: int
 ImGuiCond_Once: int
 ImGuiCond_FirstUseEver: int
 ImGuiCond_Appearing: int
+ImGuiTableFlags_None: int
+ImGuiTableFlags_Resizable: int
+ImGuiTableFlags_Reorderable: int
+ImGuiTableFlags_Hideable: int
+ImGuiTableFlags_Sortable: int
+ImGuiTableFlags_NoSavedSettings: int
+ImGuiTableFlags_ContextMenuInBody: int
+ImGuiTableFlags_RowBg: int
+ImGuiTableFlags_BordersInnerH: int
+ImGuiTableFlags_BordersOuterH: int
+ImGuiTableFlags_BordersInnerV: int
+ImGuiTableFlags_BordersOuterV: int
+ImGuiTableFlags_BordersH: int
+ImGuiTableFlags_BordersV: int
+ImGuiTableFlags_BordersInner: int
+ImGuiTableFlags_BordersOuter: int
+ImGuiTableFlags_Borders: int
+ImGuiTableFlags_NoBordersInBody: int
+ImGuiTableFlags_NoBordersInBodyUntilResize: int
+ImGuiTableFlags_SizingFixedFit: int
+ImGuiTableFlags_SizingFixedSame: int
+ImGuiTableFlags_SizingStretchProp: int
+ImGuiTableFlags_SizingStretchSame: int
+ImGuiTableFlags_NoHostExtendX: int
+ImGuiTableFlags_NoHostExtendY: int
+ImGuiTableFlags_NoKeepColumnsVisible: int
+ImGuiTableFlags_PreciseWidths: int
+ImGuiTableFlags_NoClip: int
+ImGuiTableFlags_PadOuterX: int
+ImGuiTableFlags_NoPadOuterX: int
+ImGuiTableFlags_NoPadInnerX: int
+ImGuiTableFlags_ScrollX: int
+ImGuiTableFlags_ScrollY: int
+ImGuiTableFlags_SortMulti: int
+ImGuiTableFlags_SortTristate: int
+ImGuiTableRowFlags_None: int
+ImGuiTableRowFlags_Headers: int
+ImGuiTableColumnFlags_None: int
+ImGuiTableColumnFlags_Disabled: int
+ImGuiTableColumnFlags_DefaultHide: int
+ImGuiTableColumnFlags_DefaultSort: int
+ImGuiTableColumnFlags_WidthStretch: int
+ImGuiTableColumnFlags_WidthFixed: int
+ImGuiTableColumnFlags_NoResize: int
+ImGuiTableColumnFlags_NoReorder: int
+ImGuiTableColumnFlags_NoHide: int
+ImGuiTableColumnFlags_NoClip: int
+ImGuiTableColumnFlags_NoSort: int
+ImGuiTableColumnFlags_NoSortAscending: int
+ImGuiTableColumnFlags_NoSortDescending: int
+ImGuiTableColumnFlags_NoHeaderLabel: int
+ImGuiTableColumnFlags_NoHeaderWidth: int
+ImGuiTableColumnFlags_PreferSortAscending: int
+ImGuiTableColumnFlags_PreferSortDescending: int
+ImGuiTableColumnFlags_IndentEnable: int
+ImGuiTableColumnFlags_IndentDisable: int
+ImGuiTableColumnFlags_IsEnabled: int
+ImGuiTableColumnFlags_IsVisible: int
+ImGuiTableColumnFlags_IsSorted: int
+ImGuiTableColumnFlags_IsHovered: int
