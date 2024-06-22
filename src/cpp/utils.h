@@ -9,6 +9,7 @@
 #include "Eigen/Dense"
 
 #include "polyscope/image_quantity.h"
+#include "polyscope/transformation_gizmo.h"
 
 namespace py = pybind11;
 namespace ps = polyscope;
@@ -149,7 +150,13 @@ py::class_<StructureT> bindStructure(py::module& m, std::string name) {
 
       // additional controls
       .def("enable_transform_gizmo", &StructureT::enableTransformGizmo, "enable transform gizmo", py::arg("enabled") = true)
-      .def("is_enabled_transform_gizmo", &StructureT::isEnabledTransformGizmo, "is transform gizmo enabled?");
+      .def("is_enabled_transform_gizmo", &StructureT::isEnabledTransformGizmo, "is transform gizmo enabled?")
+      // TODO: clean this, this is too DIY
+      .def("set_transform_mode_gizmo", [](StructureT& s, int mode = static_cast<int>(ps::TransformMode::Translation)) {
+            s.setTransformModeGizmo(static_cast<ps::TransformMode>(mode));
+      }, "set transform_mode of gizmo", py::arg("mode") = static_cast<int>(ps::TransformMode::Translation))
+
+      ;
 
       // managed buffer things
       def_all_managed_buffer_funcs<StructureT, float> (s, ps::ManagedBufferType::Float);
