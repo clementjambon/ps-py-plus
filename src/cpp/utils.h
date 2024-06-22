@@ -9,6 +9,7 @@
 #include "Eigen/Dense"
 
 #include "polyscope/image_quantity.h"
+#include "polyscope/transformation_gizmo.h"
 
 namespace py = pybind11;
 namespace ps = polyscope;
@@ -101,16 +102,17 @@ py::class_<StructureT> bindStructure(py::module& m, std::string name) {
 
   // structure basics
   s.def("remove", &StructureT::remove, "Remove the structure")
-      .def("get_name", [](StructureT& s) { return s.name; }, "Ge the name")
+      .def(
+          "get_name", [](StructureT& s) { return s.name; }, "Ge the name")
       .def("get_unique_prefix", &StructureT::uniquePrefix, "Get unique prefix")
       .def("set_enabled", &StructureT::setEnabled, "Enable the structure")
       .def("enable_isolate", &StructureT::enableIsolate, "Enable the structure, disable all of same type")
       .def("is_enabled", &StructureT::isEnabled, "Check if the structure is enabled")
       .def("set_transparency", &StructureT::setTransparency, "Set transparency alpha")
       .def("get_transparency", &StructureT::getTransparency, "Get transparency alpha")
-      
+
       // group things
-      .def("add_to_group", overload_cast_<std::string>()(&StructureT::addToGroup) , "Add to group")
+      .def("add_to_group", overload_cast_<std::string>()(&StructureT::addToGroup), "Add to group")
 
       // slice plane things
       .def("set_ignore_slice_plane", &StructureT::setIgnoreSlicePlane, "Set ignore slice plane")
@@ -146,7 +148,13 @@ py::class_<StructureT> bindStructure(py::module& m, std::string name) {
 
       // additional controls
       .def("enable_transform_gizmo", &StructureT::enableTransformGizmo, "enable transform gizmo", py::arg("enabled") = true)
-      .def("is_enabled_transform_gizmo", &StructureT::isEnabledTransformGizmo, "is transform gizmo enabled?");
+      .def("is_enabled_transform_gizmo", &StructureT::isEnabledTransformGizmo, "is transform gizmo enabled?")
+      // TODO: clean this, this is too DIY
+      .def("set_transform_mode_gizmo", [](StructureT& s, int mode = static_cast<int>(ps::TransformMode::Translation)) {
+            s.setTransformModeGizmo(static_cast<ps::TransformMode>(mode));
+      }, "set transform_mode of gizmo", py::arg("mode") = static_cast<int>(ps::TransformMode::Translation))
+
+      ;
 
       // managed buffer things
       def_all_managed_buffer_funcs<StructureT, float> (s, ps::ManagedBufferType::Float);
