@@ -63,6 +63,13 @@ class Structure:
     def get_transform_gizmo_enabled(self):
         return self.bound_instance.get_transform_gizmo_enabled()
     
+    ## Additional controls
+    def enable_transform_gizmo(self, enabled: bool = True):
+        self.bound_instance.enable_transform_gizmo(enabled)
+
+    def is_enabled_transform_gizmo(self):
+        return self.bound_instance.is_enabled_transform_gizmo()
+    
     ## Managed Buffers
     
     def get_buffer(self, buffer_name):
