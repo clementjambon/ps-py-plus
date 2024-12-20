@@ -301,6 +301,10 @@ def set_user_callback(func):
 
 def clear_user_callback():
     psb.clear_user_callback()
+    
+### Drop Callback
+def set_drop_callback(func):
+    psb.set_drop_callback(func)
 
 ### Picking
 

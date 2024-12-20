@@ -204,6 +204,20 @@ PYBIND11_MODULE(polyscope_bindings, m) {
       ps::state::userCallback = wrapperFunc;
   });
   m.def("clear_user_callback", []() {ps::state::userCallback = nullptr;});
+  
+  // === Drop Callback
+  m.def("set_drop_callback",  [](const std::function<void(std::string)>& func) { 
+      // Create a wrapper which checks signals before calling the passed fuction
+      // Captures by value, because otherwise func seems to become invalid. This is probably happening
+      // on the Python side, and could be fixed with some Pybind11 keep_alive-s or something, but in
+      // lieu of figuring that out capture by value seems fine.
+      // See also the atexit() cleanup registered above, which is used to ensure any bound functions get deleted and we can exit cleanly.
+      auto wrapperFunc = [=](std::string input)  { 
+        checkSignals(); 
+        func(input);
+      };
+      ps::view::dropCallback = wrapperFunc;
+  });
 
   // === Pick
 
