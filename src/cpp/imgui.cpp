@@ -410,6 +410,7 @@ void bind_imgui_methods(py::module& m) {
 
     // Cursor / Layout
     m.def("Separator", []() { ImGui::Separator(); });
+    m.def("SeparatorText", [](const char* text) { ImGui::SeparatorText(text); }, py::arg("text"));
     m.def(
         "SameLine",
         [](float offset_from_start_x, float spacing) { ImGui::SameLine(); },
@@ -2459,5 +2460,4 @@ void bind_imgui_enums(py::module& m) {
   m.attr("ImGuiTableColumnFlags_IsVisible") = static_cast<int>(ImGuiTableColumnFlags_IsVisible);
   m.attr("ImGuiTableColumnFlags_IsSorted") = static_cast<int>(ImGuiTableColumnFlags_IsSorted);
   m.attr("ImGuiTableColumnFlags_IsHovered") = static_cast<int>(ImGuiTableColumnFlags_IsHovered);
-
 }
