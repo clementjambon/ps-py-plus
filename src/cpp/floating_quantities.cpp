@@ -14,6 +14,9 @@
 namespace py = pybind11;
 namespace ps = polyscope;
 
+using Vec2T = std::tuple<float, float>;
+ImVec2 imgui_to_vec2(const Vec2T& v) { return ImVec2(std::get<0>(v), std::get<1>(v)); }
+
 // clang-format off
 void bind_floating_quantities(py::module& m) {
 
@@ -34,6 +37,16 @@ void bind_floating_quantities(py::module& m) {
   auto qColorImage = bindColorQuantity<ps::ColorImageQuantity>(m, "ColorImageQuantity");
   addImageQuantityBindings(qColorImage);
   qColorImage.def("set_is_premultiplied", &ps::ColorImageQuantity::setIsPremultiplied);
+  qColorImage.def("imgui_image", 
+        [](ps::ColorImageQuantity& quantity, int w, int h, const Vec2T& uv0, const Vec2T& uv1) {
+            return quantity.imguiImage(w, h, imgui_to_vec2(uv0), imgui_to_vec2(uv1));
+        },
+        py::arg("w"),
+        py::arg("h"),
+        py::arg("uv0") = std::make_tuple(0.f, 0.f),
+        py::arg("uv1") = std::make_tuple(1.f, 1.f)
+    );
+
 
   // global / free-floating adders
   m.def("add_scalar_image_quantity", &ps::addScalarImageQuantity<Eigen::VectorXf>, 

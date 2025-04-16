@@ -39,6 +39,8 @@ def add_scalar_image_quantity(name, values, image_origin="upper_left", datatype=
     process_scalar_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
 
+    return q
+
 def add_color_image_quantity(name, values, image_origin="upper_left", struct_ref=None, **option_args):
     
     struct_instance_ref = _resolve_floating_struct_instance(struct_ref)
@@ -58,6 +60,8 @@ def add_color_image_quantity(name, values, image_origin="upper_left", struct_ref
     process_image_args(struct_ref, q, option_args)
     process_color_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
+
+    return q
 
 
 def add_color_alpha_image_quantity(name, values, image_origin="upper_left", struct_ref=None, **option_args):
@@ -79,6 +83,8 @@ def add_color_alpha_image_quantity(name, values, image_origin="upper_left", stru
     process_image_args(struct_ref, q, option_args)
     process_color_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
+    
+    return q
 
     
 def add_depth_render_image_quantity(name, depth_values, normal_values, image_origin="upper_left", color=None, struct_ref=None, **option_args):
@@ -109,6 +115,8 @@ def add_depth_render_image_quantity(name, depth_values, normal_values, image_ori
     process_quantity_args(struct_ref, q, option_args)
     process_render_image_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
+
+    return q
 
 
 def add_color_render_image_quantity(name, depth_values, normal_values, color_values, image_origin="upper_left", struct_ref=None, **option_args):
@@ -142,6 +150,8 @@ def add_color_render_image_quantity(name, depth_values, normal_values, color_val
     process_render_image_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
 
+    return q
+
 
 def add_scalar_render_image_quantity(name, depth_values, normal_values, scalar_values, image_origin="upper_left", struct_ref=None, **option_args):
 
@@ -174,6 +184,8 @@ def add_scalar_render_image_quantity(name, depth_values, normal_values, scalar_v
     process_render_image_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
 
+    return q
+
 
 def add_raw_color_render_image_quantity(name, depth_values, color_values, image_origin="upper_left", struct_ref=None, **option_args):
 
@@ -200,6 +212,8 @@ def add_raw_color_render_image_quantity(name, depth_values, color_values, image_
     process_render_image_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
 
+    return q
+
 def add_raw_color_alpha_render_image_quantity(name, depth_values, color_values, image_origin="upper_left", struct_ref=None, **option_args):
 
     struct_instance_ref = _resolve_floating_struct_instance(struct_ref)
@@ -224,3 +238,5 @@ def add_raw_color_alpha_render_image_quantity(name, depth_values, color_values, 
     process_color_args(struct_ref, q, option_args)
     process_render_image_args(struct_ref, q, option_args)
     check_all_args_processed(struct_ref, q, option_args)
+
+    return q
