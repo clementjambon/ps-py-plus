@@ -1,4 +1,5 @@
 #include <pybind11/eigen.h>
+#include <pybind11/functional.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -14,6 +15,12 @@
 namespace py = pybind11;
 namespace ps = polyscope;
 
+// Signal handler (makes ctrl-c work, etc)
+// TODO: move that in utils
+void checkSignalsMesh() {
+     if (PyErr_CheckSignals() != 0) throw py::error_already_set();
+   }
+   
 
 void bind_surface_mesh(py::module& m) {
 
@@ -190,7 +197,35 @@ void bind_surface_mesh(py::module& m) {
            "Add a face tangent vector quantity", py::return_value_policy::reference)
       .def("add_one_form_tangent_vector_quantity",
            &ps::SurfaceMesh::addOneFormTangentVectorQuantity<Eigen::VectorXf, Eigen::Matrix<bool, Eigen::Dynamic, 1>>,
-           "Add a one form tangent vector quantity", py::return_value_policy::reference);
+           "Add a one form tangent vector quantity", py::return_value_policy::reference)
+     // Custom Callbacks
+     .def("set_pick_callback",
+          [](ps::SurfaceMesh& s, const std::function<void(int, int)>& func) {
+            // Create a wrapper which checks signals before calling the passed fuction
+            // Captures by value, because otherwise func seems to become invalid. This is probably happening
+            // on the Python side, and could be fixed with some Pybind11 keep_alive-s or something, but in
+            // lieu of figuring that out capture by value seems fine.
+            // See also the atexit() cleanup registered above, which is used to ensure any bound functions get deleted
+            // and we can exit cleanly.
+            auto wrapperFunc = [=](int surface_pick_type, int surface_pick_id) {
+              checkSignalsMesh();
+              func(surface_pick_type, surface_pick_id);
+            };
+            s.setUserPickCallback(wrapperFunc);
+          })
+     .def("set_hover_callback", [](ps::SurfaceMesh& s, const std::function<void(int, int)>& func) {
+       // Create a wrapper which checks signals before calling the passed fuction
+       // Captures by value, because otherwise func seems to become invalid. This is probably happening
+       // on the Python side, and could be fixed with some Pybind11 keep_alive-s or something, but in
+       // lieu of figuring that out capture by value seems fine.
+       // See also the atexit() cleanup registered above, which is used to ensure any bound functions get deleted and
+       // we can exit cleanly.
+       auto wrapperFunc = [=](int surface_pick_type, int surface_pick_id) {
+         checkSignalsMesh();
+         func(surface_pick_type, surface_pick_id);
+       };
+       s.setUserHoverCallback(wrapperFunc);
+     });
 
 
   // Static adders and getters
